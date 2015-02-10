@@ -1,7 +1,7 @@
 int LED1 = 10;
 int LED2 = 12;
 boolean randomize = true;
-int myCase = 1;
+int myCase = 2;  // Defines pattern of blinking
 
 void setup() 
 {
@@ -12,34 +12,50 @@ void setup()
 
 void loop()
 {
-  switch (myCase)
+  switch (myCase) {
   case 1:
-  // Case 1 - Alternating
-  {
-    digitalWrite(LED1, HIGH);
-    digitalWrite(LED2, LOW);
-    if (randomize)
+    // Case 1 - Alternating
     {
-      delay(random(1,1000));
+      digitalWrite(LED1, HIGH);
+      digitalWrite(LED2, LOW);
+      if (randomize)
+      {
+        delay(random(1,1000));
+      }
+      else
+      { 
+        delay(500);    //Delay of 500 ms
+      }
+      digitalWrite(LED1, LOW);
+      digitalWrite(LED2, HIGH);
+      if (randomize)
+      {
+        delay(random(1,1000));
+      }
+      else
+      { 
+        delay(500);    //Delay of 500 ms
+      }
+      break;  
     }
-    else
-    { 
-      delay(500);    //Delay of 500 ms
-    }
-    digitalWrite(LED1, LOW);
-    digitalWrite(LED2, HIGH);
-    if (randomize)
+    // ===================================================
+  case 2:
+  // LEDs blinking but not in SYNC
     {
-      delay(random(1,1000));
+      digitalWrite(LED1, HIGH);
+      digitalWrite(LED2, HIGH);
+      delay (random(1, 500));
+      digitalWrite(LED1, LOW);
+      delay (random(1, 500));
+      digitalWrite(LED2, LOW);
+      delay (random(1,500));
+
     }
-    else
-    { 
-      delay(500);    //Delay of 500 ms
-    }
-    break;  
   }
 
 }
+
+
 
 
 
