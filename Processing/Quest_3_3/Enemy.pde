@@ -1,28 +1,22 @@
 // User-controlled ship class
 
-class Ship {
+class Enemy {
   // Position
   float x, y;
-  boolean firing;
 
   Ship (float x, float y) {
     this.x = x;
     this.y = y;
-    firing = false;
   }
 
   void update () {
+    y += 5;
   }
 
   void render () {
-    fill(255, 60, 60);
+    fill(80, 80, 80);
     rect (x, y, 20, 20);
 
-    if (firing) {
-      // Render the ship's laser
-      fill (255, 255 0);
-      line (x, y, x, 0);
-    }
   }
 }
 
