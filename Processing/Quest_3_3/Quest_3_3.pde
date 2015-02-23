@@ -21,7 +21,7 @@ void setup() {
 
   _port = new Serial(this, "/dev/tty.usbmodem1421", 9600);
   _port.bufferUntil('\n');
-  
+
   Ship ship = new Ship (width/2, height - 50);
   ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 }
@@ -29,16 +29,40 @@ void setup() {
 void draw() {
   // Add a new enemy every few seconds
   if (frameCount % 240 == 0) {
-    Enemy e = new Enemy (random (0, width), 0); 
+    Enemy e = new Enemy (random (0, width), 0.0f);
+    enemies.add(e);
   }
-  
+
   //handleInput ();
-  
-  // Update ship x position
+
+  // Update positions
   ship.x = map (_sensorValue, 0, 1024, 20, width - 20);
   ship.firing = _buttonPressed;
-  
+  for (int i = 0; i < enemies.size (); i++) {
+    enemies.get(i).update();
+  }
+
+  // Check ship against every enemy
+  if (ship.firing) {
+    for (int i = 0; i < enemies.size (); i++) {
+      e = enemies.get(i);
+      
+      // Check beam collision
+      if (dist(ship.x, e.x, 0, 0) <= 20) {
+        e.dead = true;
+      }
+    }
+  }
+
+  // Display everything
   render ();
+
+  // Remove dead enemies
+  for (int i = 0; i < enemies.size (); i++) {
+    // If the enemy is dead, remove it from arraylist
+    if (enemies.get(i).dead)
+      enemies.remove(i);
+  }
 }
 
 void serialEvent(Serial p) {
@@ -60,30 +84,29 @@ void serialEvent(Serial p) {
 
 // Handles user input
 /*void handleInput () {
-  // Sensor value mapped to x coordinate
-  map (_sensorValue, 0, 1024, 0, width);
-}*/
+ // Sensor value mapped to x coordinate
+ map (_sensorValue, 0, 1024, 0, width);
+ }*/
 
 // Update positions and variables
 void update () {
-  
 }
 
 // Draw to screen
 void render () {
-  
-  
-  /*if (_buttonPressed) {
-    float bgColor = map(_sensorValue, 0, 1024, 0, 255);
-    background(bgColor);
-  }
 
-  if (_buttonPressed) {
-    fill (random(0, 255), random(0, 255), random(0, 255));
-  } else {
-    fill (60, 60, 255, 127);
-  }
-  ellipse (map(_sensorValue, 0, 1024, 0, width), height/2, RADIUS, RADIUS);
-  */
+
+  /*if (_buttonPressed) {
+   float bgColor = map(_sensorValue, 0, 1024, 0, 255);
+   background(bgColor);
+   }
+   
+   if (_buttonPressed) {
+   fill (random(0, 255), random(0, 255), random(0, 255));
+   } else {
+   fill (60, 60, 255, 127);
+   }
+   ellipse (map(_sensorValue, 0, 1024, 0, width), height/2, RADIUS, RADIUS);
+   */
 }
 
