@@ -4,7 +4,6 @@
  */
 
 import processing.serial.*;
-
 Serial _port;
 
 float _sensorValue = 0;
@@ -20,17 +19,6 @@ void setup() {
 
 void draw() {
   
-  if (_buttonPressed) {
-    float bgColor = map(_sensorValue, 0, 1024, 0, 255);
-    background(bgColor);
-  }
-
-  if (_buttonPressed) {
-    fill (random(0, 255), random(0, 255), random(0, 255));
-  } else {
-    fill (60, 60, 255, 127);
-  }
-  ellipse (map(_sensorValue, 0, 1024, 0, width), height/2, RADIUS, RADIUS);
 }
 
 void serialEvent(Serial p) {
@@ -48,5 +36,19 @@ void serialEvent(Serial p) {
 
     println(_sensorValue + " " + _buttonPressed);
   }
+}
+
+void render () {
+  if (_buttonPressed) {
+    float bgColor = map(_sensorValue, 0, 1024, 0, 255);
+    background(bgColor);
+  }
+
+  if (_buttonPressed) {
+    fill (random(0, 255), random(0, 255), random(0, 255));
+  } else {
+    fill (60, 60, 255, 127);
+  }
+  ellipse (map(_sensorValue, 0, 1024, 0, width), height/2, RADIUS, RADIUS);
 }
 
