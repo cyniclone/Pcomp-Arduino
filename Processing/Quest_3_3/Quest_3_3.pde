@@ -14,7 +14,7 @@ final int RADIUS = 60;
 void setup() {
   size(800, 640);
 
-  _port = new Serial(this, "/dev/tty.usbmodem1421", 9600);
+  _port = new Serial(this, "/dev/tty.usbmodem1411", 9600);
   _port.bufferUntil('\n');
 }
 
