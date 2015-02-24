@@ -4,46 +4,100 @@
  Code modified from Arduino Switch tutorial
  Code referenced from Christoper Lewis' Arduino tutorial:
  http://cttoronto.com/10/22/2013/introduction-arduino-workshop-notes/
- 
- 
  */
 
-const int led_pin = 9;
-const int button_pin = 7;
-int brightness = 0;
-int buttonState = 0;
+// ======Global variables===========================
 
-// Used to check delay time
-long lastTime;
-int delayTime = 2000;
+int ledPin = 13;
+int buttonPin = 2;
+int potPin = A0;
 
-// Use millis instead of delay
-long previousMillis;
+boolean ledIsOn = false;
+boolean isSwitchOn = false; // is LED blinking
+int buttonState = HIGH;
+int lastButtonState = HIGH;
 
-void setup()
-{
-  //Serial.begin(19200);
+long now = 0;
+long lastBlinkTime = 0;
+int blinkInterval = 1000;
 
-  pinMode (led_pin, OUTPUT); // Set LED as output
+// ================================================
 
-  pinMode(button_pin, INPUT); // Button is an input
-
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(potPin, INPUT);
 }
 
-void loop()
-{
-  // Read button state
-  buttonState = digitalRead(button_pin);
+void loop() {
+  now = millis();
 
-  //int sensorValue = analogRead(A0); // Read potentiometer on pin A0
+  setBlinkIntervalBasedOnPot();
 
-    if (buttonState == HIGH) {
-    digitalWrite(led_pin, HIGH);
+  if (buttonGoesFromPressedToReleased()) {
+    toggleSwitch(); 
   }
+
+  if (isSwitchOn) {
+    blinkLed(); 
+  } 
   else {
-    digitalWrite(led_pin, LOW);
+    turnLedOff();
   }
 }
+
+// ================================================
+
+void setBlinkIntervalBasedOnPot() {
+  int pot = analogRead(potPin); // 0 to 1023 
+  // blink interval between 300 and 1500 ms
+  blinkInterval = map(pot, 0, 1023, 1000, 150);
+}
+
+void blinkLed() {
+  if (now - lastBlinkTime > blinkInterval) {
+    toggleLed();
+    lastBlinkTime = now;
+  } 
+}
+
+void turnLedOff() {
+  ledIsOn = false;
+  digitalWrite(ledPin, LOW);
+}
+
+void toggleSwitch() {
+  isSwitchOn = !isSwitchOn;
+}
+
+void toggleLed() {
+  ledIsOn = !ledIsOn;
+  if (ledIsOn) {
+    digitalWrite(ledPin, HIGH); 
+  } 
+  else {
+    digitalWrite(ledPin, LOW);
+  }
+}
+
+boolean buttonGoesFromPressedToReleased() {
+  boolean itDid = false;
+
+//  buttonState = digitalRead(buttonPin);
+  buttonState =  readButtonDebounced();
+  if (buttonState == HIGH) {  // Not pressed
+    if (lastButtonState == LOW) { // Pressed
+      itDid = true;
+
+    } 
+  }
+  lastButtonState = buttonState;
+  return itDid;
+}
+
+// ================================================
+
+
 
 
 
