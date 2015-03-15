@@ -22,7 +22,7 @@ void draw() {
   
   if (_buttonPressed) {
     float bgColor = map(_sensorValue, 0, 1024, 0, 255);
-    background(bgColor);
+    background(bgColor, 127);
   }
 
   if (_buttonPressed) {
@@ -30,7 +30,7 @@ void draw() {
   } else {
     fill (60, 60, 255, 127);
   }
-  ellipse (map(_sensorValue, 0, 1024, 0, width), height/2, RADIUS, RADIUS);
+  ellipse (map(_sensorValue, 0, 1024, 0 + RADIUS/2, width - RADIUS/2), height/2, RADIUS, RADIUS);
 }
 
 void serialEvent(Serial p) {
